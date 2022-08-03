@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 15d405c87c7f64e4b91002a43b2e7592
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _snakePrefab: {instanceID: 0}
+  - _foodPrefab: {fileID: -4651189781319632163, guid: df5113e20c9b2a14fa68d9b917453620, type: 3}
+  - grid: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
