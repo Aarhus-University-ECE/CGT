@@ -1,25 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Snake : MonoBehaviour
 {
     Vector2 direction;
     public GameObject segment;
     List<GameObject> segments = new List<GameObject>();
+    int snakeInitialLength = 0;
+    private int score = 0;
+    public Text txt;
+    public Button resetBtn;
+    public Button pauseBtn;
+    private bool playFlag = false;
+    private bool snakeDead = false;
 
     // Start is called before the first frame update
     void Start()
-    {
+    {   
+        resetBtn.onClick.AddListener(Reset);
+        pauseBtn.onClick.AddListener(PausePlayGame);
+        score = 0;
+        txt.text = "Score : " + score.ToString();
         Reset();
     }
 
     void Reset()
     {
+        snakeDead = false;
         transform.position = new Vector2(0,-1);
         direction = Vector2.right;
+        transform.rotation = Quaternion.Euler(0,0,-90);
         Time.timeScale = 0.1f; // speed
+        ResetScore();
         ResetSegments();
+        PlayGame();
     }
 
     void ResetSegments()
@@ -32,10 +48,16 @@ public class Snake : MonoBehaviour
         segments.Clear();
         segments.Add(gameObject);
 
-        for (int i = 0; i < 3; ++i)
+        for (int i = 0; i < snakeInitialLength; ++i)
         {
             Grow();
         }
+    }
+
+    void ResetScore()
+    {
+        score = 0;
+        txt.text = "Score : " + score.ToString();
     }
 
     void Grow()
@@ -43,6 +65,7 @@ public class Snake : MonoBehaviour
         GameObject newSegment = Instantiate(segment);
         newSegment.transform.position = segments[segments.Count - 1].transform.position;
         segments.Add(newSegment);
+        Time.timeScale += 0.02f;
     }
 
     // Update is called once per frame
@@ -106,10 +129,45 @@ public class Snake : MonoBehaviour
         if (collisionObject.tag == "Obstacle")
         {
             Time.timeScale = 0;
+            ResetScore();
+            PauseGame();
+            snakeDead = true;
         }
         else if (collisionObject.tag == "Food")
         {
             Grow();
+            score = segments.Count - 1;
+            txt.text = "Score : " + score.ToString();
         }
+    }
+
+
+    void PausePlayGame()
+    {
+        if (playFlag)
+        {
+            PauseGame();
+            Time.timeScale = 0;
+        }
+        else
+        {
+            PlayGame();
+            if (snakeDead)
+                Reset();
+            else
+                Time.timeScale = 0.1f;
+        }
+    }
+
+    void PlayGame()
+    {
+        playFlag = true;
+        (pauseBtn.GetComponentInChildren(typeof(Text)) as Text).text = "Pause";
+    }
+
+    void PauseGame()
+    {
+        playFlag = false;
+        (pauseBtn.GetComponentInChildren(typeof(Text)) as Text).text = "Play";
     }
 }

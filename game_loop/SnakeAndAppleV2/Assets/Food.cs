@@ -12,8 +12,8 @@ public class Food : MonoBehaviour
 
     void RandomPosition()
     {
-        int x = Random.Range(-4,4);
-        int y = Random.Range(-4,4);
+        int x = Random.Range(-3,3);
+        int y = Random.Range(-3,3);
         transform.position = new Vector2(x,y);
     }
 
